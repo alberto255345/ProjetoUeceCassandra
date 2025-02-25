@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  cassandra1:
+    image: cassandra:latest
+    container_name: cassandra1
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MeuCluster
+      - CASSANDRA_DC=DC1
+      - CASSANDRA_RACK=Rack1
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra1
+      - CASSANDRA_BROADCAST_RPC_ADDRESS=cassandra1
+    ports:
+      - "7000:7000"   # Comunicação entre nós
+      - "9042:9042"   # Protocolo CQL
+
+  cassandra2:
+    image: cassandra:latest
+    container_name: cassandra2
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MeuCluster
+      - CASSANDRA_SEEDS=cassandra1
+      - CASSANDRA_DC=DC1
+      - CASSANDRA_RACK=Rack1
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra2
+      - CASSANDRA_BROADCAST_RPC_ADDRESS=cassandra2
+    ports:
+      - "7001:7000"
+      - "9043:9042"
+
+  cassandra3:
+    image: cassandra:latest
+    container_name: cassandra3
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MeuCluster
+      - CASSANDRA_SEEDS=cassandra1
+      - CASSANDRA_DC=DC1
+      - CASSANDRA_RACK=Rack1
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra3
+      - CASSANDRA_BROADCAST_RPC_ADDRESS=cassandra3
+    ports:
+      - "7002:7000"
+      - "9044:9042"
+
+networks:
+  default:
+    name: cassandra_network
+    driver: bridge
